@@ -1,32 +1,83 @@
-const validate = () => {
-  const calcValidate = () => {
-   const inputs = document.querySelectorAll(".calc-block>input");
- 
-   inputs.forEach((elem) => {
-     elem.setAttribute("type", "number");
-     elem.addEventListener("input", () => {
-       elem.value = elem.value.replace(/\D/g, "");
-     });
-   });
-  };
- 
-  const formValidate = (form) => {
-   form.querySelector("input:first-child").addEventListener("input", () => {
-     form.querySelector("input[placeholder='Ваше имя']").value = form.querySelector("input[placeholder='Ваше имя']").value.replace(/[^а-я\s\-]/gi, "");
-   });
-   form.querySelector("input[type='email']").addEventListener("input", () => {
-     form.querySelector("input[type='email']").value = form.querySelector("input[type='email']").value.replace(/[^a-z0-9\-\@\_\.\!\~\*\']/gi, "");
-   });
-   form.querySelector("input[type='tel']").addEventListener("input", () => {
-     form.querySelector("input[type='tel']").value = form.querySelector("input[type='tel']").value.replace(/[^\d\(\)\-]/gi, "");
-   });
-  };
+const calcValidate = () => {
+	const inputs = document.querySelectorAll(".calc-block>input");
 
- 
-  calcValidate();
-  formValidate(document.querySelector(".main-form"));
-  formValidate(document.querySelector(".footer-form"));
-  formValidate(document.querySelector(".popup"));
- };
- 
- export default validate;
+	inputs.forEach((elem) => {
+		elem.setAttribute("type", "number");
+		elem.addEventListener("input", () => {
+			elem.value = elem.value.replace(/\D/g, "");
+		});
+	});
+};
+
+const formValidate = (form) => {
+	let valide = true;
+	form.querySelectorAll("input").forEach((elem) => {
+		if (elem.getAttribute("type") == "text") {
+			const regExpName = /[^а-я\s]+/i;
+			if (regExpName.test(elem.value)) {
+				valide = false;
+				elem.classList.add("error");
+				elem.value = "";
+				elem.placeholder = "Только кириллица и пробелы";
+				elem.addEventListener("focus", () => {
+					elem.classList.remove("error");
+					elem.placeholder = "Имя";
+				});
+			} else {
+				elem.classList.remove("error");
+				elem.placeholder = "Имя";
+			}
+		} else if (elem.getAttribute("type") == "tel") {
+			const regExpName = /[^\d\+]+/i;
+			if (regExpName.test(elem.value)) {
+				valide = false;
+				elem.classList.add("error");
+				elem.value = "";
+				elem.placeholder = "Только цифры и знак +";
+				elem.addEventListener("focus", () => {
+					elem.classList.remove("error");
+					elem.placeholder = "Номер телефона";
+				});
+			} else {
+				elem.classList.remove("error");
+				elem.placeholder = "Номер телефона";
+			}
+		} else if (elem.getAttribute("name") == "user_message") {
+			const regExpName = /[^а-я\s\d\.\,]+/i;
+			if (regExpName.test(elem.value)) {
+				valide = false;
+				elem.classList.add("error");
+				elem.value = "";
+				elem.placeholder = "Только кириллица,пробелы,цифры и знаки препинания";
+				elem.addEventListener("focus", () => {
+					elem.classList.remove("error");
+					elem.placeholder = "Ваше сообщение";
+				});
+			} else {
+				elem.classList.remove("error");
+				elem.placeholder = "Ваше сообщение";
+			}
+		} else if (elem.getAttribute("type") == "email") {
+			const regExpName = /[a-z\d]+@[a-z]+\.[a-z]/i;
+			if (!regExpName.test(elem.value)) {
+				valide = false;
+				elem.classList.add("error");
+				elem.value = "";
+				elem.placeholder = "Образец - exam@exam.exam";
+				elem.addEventListener("focus", () => {
+					elem.classList.remove("error");
+					elem.placeholder = "E-mail";
+				});
+			} else {
+				elem.classList.remove("error");
+				elem.placeholder = "E-mail";
+			}
+		}
+	});
+	return valide;
+};
+
+export {
+	calcValidate,
+	formValidate
+};
