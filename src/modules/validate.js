@@ -14,11 +14,11 @@ const formValidate = (form) => {
 	form.querySelectorAll("input").forEach((elem) => {
 		if (elem.getAttribute("type") == "text") {
 			const regExpName = /[^а-я\s]+/i;
-			if (regExpName.test(elem.value)) {
+			if (regExpName.test(elem.value) || elem.value.length < 2) {
 				valide = false;
 				elem.classList.add("error");
 				elem.value = "";
-				elem.placeholder = "Только кириллица и пробелы";
+				elem.placeholder = "Мин. 2 символа,кириллица и пробелы";
 				elem.addEventListener("focus", () => {
 					elem.classList.remove("error");
 					elem.placeholder = "Имя";
@@ -29,11 +29,11 @@ const formValidate = (form) => {
 			}
 		} else if (elem.getAttribute("type") == "tel") {
 			const regExpName = /[^\d\+]+/i;
-			if (regExpName.test(elem.value)) {
+			if (regExpName.test(elem.value) || elem.value.length < 11) {
 				valide = false;
 				elem.classList.add("error");
 				elem.value = "";
-				elem.placeholder = "Только цифры и знак +";
+				elem.placeholder = "Мин. 11 сим.,только цифры и знак +";
 				elem.addEventListener("focus", () => {
 					elem.classList.remove("error");
 					elem.placeholder = "Номер телефона";

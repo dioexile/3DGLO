@@ -19,23 +19,29 @@ const timer = (deadline) => {
 		let minutes = Math.floor(((timeRemaining) / 60) % 60);
 		let seconds = Math.floor((timeRemaining) % 60);
 
-		return {day, hours, minutes, seconds, timeRemaining};
+		return {
+			day,
+			hours,
+			minutes,
+			seconds,
+			timeRemaining
+		};
 	};
 
 	const updateTimer = (deadline) => {
 		let time = getTime(deadline);
 		let timerDays = document.querySelector(".timer-days");
-		
+
 		if (time.timeRemaining > 0) {
-		timerDays.textContent = time.day + " :";
-		timerHours.textContent = time.hours;
-		timerMinutes.textContent = time.minutes;
-		timerSeconds.textContent = time.seconds;
-		document.querySelectorAll(".number").forEach((elem) => {
-			if (elem.textContent < 10) {
-				elem.textContent = "0" + elem.textContent;
-			}
-		});
+			timerDays.textContent = time.day + " :";
+			timerHours.textContent = time.hours;
+			timerMinutes.textContent = time.minutes;
+			timerSeconds.textContent = time.seconds;
+			document.querySelectorAll(".number").forEach((elem) => {
+				if (elem.textContent < 10) {
+					elem.textContent = "0" + elem.textContent;
+				}
+			});
 		} else if (time.timeRemaining < 0) {
 			timerDays.textContent = "0 :";
 			timerHours.textContent = "00";
@@ -45,6 +51,7 @@ const timer = (deadline) => {
 	};
 
 	createNewSpanTime(timerHours);
+	updateTimer(deadline);
 	setInterval(updateTimer, 1000, deadline);
 };
 
