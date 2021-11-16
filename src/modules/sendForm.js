@@ -1,3 +1,4 @@
+
 import {
 	formValidate
 } from "./validate";
@@ -18,6 +19,15 @@ const sendForm = (formId) => {
 		});
 	};
 
+	const createDivMessage = (createdElement, message, elementClass) => {
+		const newDiv = document.createElement(createdElement);
+		if (message == "message") {
+			newDiv.textContent = "Данные формы заполненны не верно,форма не валидна";
+		}
+		newDiv.classList.add(elementClass);
+		form.append(newDiv);
+	};
+
 	const submit = () => {
 		const inputs = form.querySelectorAll("input");
 		const formData = new FormData(form);
@@ -27,7 +37,9 @@ const sendForm = (formId) => {
 			formObject[key] = val;
 		});
 
-	
+		if (!form.querySelector(".form-message")) {
+			createDivMessage("div", "preload", "form-message");
+		}
 
 		if (formValidate(form)) {
 			sendData({
@@ -49,7 +61,7 @@ const sendForm = (formId) => {
 				})
 				.then(() => {
 					let content = form.querySelector(".form-message");
-					content.innerHTML = "Данные успешно отправлены.";
+					content.textContent = "Данные успешно отправлены.";
 					content.classList.add("success");
 				})
 				.then(() => {
@@ -69,7 +81,7 @@ const sendForm = (formId) => {
 				});
 		} else {
 			if (form.querySelector(".form-message")) {
-				form.querySelector(".form-message").textContent = "данные формы заполненны не верно";
+				form.querySelector(".form-message").textContent = "Данные формы заполненны не верно,форма не отправлена";
 			} else {
 				createDivMessage("div", "message", "form-message");
 			}
@@ -82,6 +94,8 @@ const sendForm = (formId) => {
 				e.preventDefault();
 				submit();
 			});
+		} else {
+			throw new Error(`Формы с id:"${formId}" - не существует`);
 		}
 	} catch (error) {
 		console.log(error.message);
